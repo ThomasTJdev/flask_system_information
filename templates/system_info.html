@@ -1,0 +1,205 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script><!-- Tether for Bootstrap --> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+
+<script>
+$(function () {
+
+// format: '%Y-%m-%d %H:%M:%S'
+
+// Memory    
+var chart1 = c3.generate({
+    bindto: '#chart1',
+    data: {
+        columns: [
+            ['data', {{ v6 | safe }}]
+        ],
+        type: 'gauge',
+    },
+    gauge: {
+        min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+        max: {{ v5 | safe }}, // 100 is default
+        units: 'MB',
+    },
+    color: {
+        pattern: ['#60B044', '#F6C600', '#F97600', '#FF0000'], // the three color levels for the percentage values.
+        threshold: {
+            unit: 'value', // percentage is default
+            values: [30, 60, 90, 100]
+        }
+    },
+    size: {
+        height: 160
+    }
+});
+
+
+// Network data
+var chart2 = c3.generate({
+    bindto: '#chart2',
+    data: {
+        columns: [
+            {{ v14 | safe }}
+        ],
+        type: 'bar',
+        labels: true
+    },
+    bar: {
+        width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+        }
+        // or
+        //width: 100 // this makes bar width 100px
+    },
+    axis: {
+        x: {
+            type: 'category',
+            categories: ['tx', 'rx']
+        }
+    },
+    size: {
+        height: 200
+    }
+});
+
+});
+
+
+</script>
+
+
+<style>
+
+.system_information {
+    -webkit-box-shadow: 4px 4px 7px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 4px 7px 0px rgba(0,0,0,0.75);
+    box-shadow: 4px 4px 7px 0px rgba(0,0,0,0.75);
+    /*width: 300px;*/
+    margin: 5px;
+}
+
+td {
+    font-size: 12px;
+}
+
+th {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.hostname, h2 {
+    text-align: center;
+}
+</style>
+
+<body>
+
+<div class="display-4 hostname">{{ hostname }}<div>
+
+<hr>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Current connections</h2>
+            {{ v9 | safe }}
+        </div>
+        <div class="col-sm-6">
+            <h2>ARP cache</h2>
+            {{ v15 | safe }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Server</h2>
+            {{ v8 | safe }}
+        </div>
+        <div class="col-sm-6">
+            <h2>User logins</h2>
+            {{ v10 | safe }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Processes (CPU)</h2>
+            {{ v1 | safe }}
+        </div>
+        <div class="col-sm-6">
+            <h2>Processes (Mem)</h2>
+            {{ v2 | safe }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Memory usage</h2>
+            <table class="table table-inverse system_information">
+                <tbody>
+                    <tr>
+                        <td>Total</td>
+                        <td>{{ v5 | safe }}</td>
+                    </tr>
+                    <tr>
+                        <td>Free</td>
+                        <td>{{ v6 | safe }}</td>
+                    </tr>
+                    <tr>
+                        <td>Used</td>
+                        <td>{{ v7 | safe }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2>Memory usage</h2>
+        <div class="col-sm-6">
+            <div id="chart1"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Internet tx/rx</h2>
+            {{ v13 | safe }}
+        </div>
+        <div class="col-sm-6">
+            <h2>Internet tx/rx</h2>
+            <div id="chart2"></div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>OS details</h2>
+            {{ v3 | safe }}
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+</body>
+
+<!--<div class="d-inline-block">
+{{ v4 | safe }}
+</div>-->
+<!--<div id="chart1"><div>-->
+<!--<div class="d-inline-block">
+{{ v11 | safe }}
+</div>
+<div class="d-inline-block">
+{{ v12 | safe }}
+</div>-->
+<!--<div class="d-inline-block">
+{{ v14 | safe }}
+</div>-->
+
+
+
