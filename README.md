@@ -6,8 +6,7 @@ These bash scripts gather system information and the python script parses it to 
 Author
 ------
 
-- [TTJ](https://gitlab.com/u/ThomasTJ)
-- License MIT
+- ThomasTJ (TTJ)
 
 License
 -------
